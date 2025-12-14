@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Creative Signup</title>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap");
+:root { --header-height: 3.5rem; --first-color: hsl(31, 100%, 70%); --button-color: hsl(0, 0%, 17%); --button-color-alt: hsl(0, 0%, 21%); --title-color: hsl(0, 0%, 15%); --text-color: hsl(0, 0%, 35%); --text-color-light: hsl(0, 0%, 55%); --body-color: hsl(0, 0%, 99%); --container-color: #fff; --border-color: hsl(0, 0%, 94%); --body-font: 'Roboto', sans-serif; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family: var(--body-font); background: var(--body-color); display:flex; justify-content:center; align-items:center; height:100vh; overflow:hidden; }
+.blob { position:absolute; width:400px; height:400px; background: var(--first-color); filter: blur(180px); animation: move 12s infinite alternate ease-in-out; }
+.blob:nth-child(2) { background: var(--button-color); animation-duration: 15s; }
+@keyframes move { 0% { transform: translate(-200px, -150px) scale(1); } 100% { transform: translate(200px, 150px) scale(1.3); } }
+.signup-container { position:relative; background: var(--container-color); padding:3rem 2.5rem; width:380px; border-radius:1.5rem; box-shadow:0 20px 40px rgba(0,0,0,.1); animation: float 4s ease-in-out infinite; }
+@keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);} }
+.signup-container h2 { text-align:center; color:var(--title-color); margin-bottom:1.5rem; font-weight:700; }
+.input-group { margin-bottom:1.2rem; }
+.input-group label { display:block; margin-bottom:.35rem; color:var(--text-color); font-size:.9rem; }
+.input-group input { width:100%; padding:.9rem 1rem; border-radius:.6rem; border:1px solid var(--border-color); background:var(--body-color); outline:none; transition:.3s; }
+.input-group input:focus { border-color:var(--first-color); box-shadow:0 0 0 3px rgba(255,170,100,.25); }
+button { width:100%; padding:1rem; border:none; border-radius:.6rem; background:var(--button-color); color:#fff; font-weight:600; transition:.3s; cursor:pointer;}
+button:hover { background:var(--button-color-alt); }
+.footer-text { margin-top:1rem; text-align:center; font-size:.85rem; color:var(--text-color); }
+.footer-text a { color:var(--first-color); font-weight:500; text-decoration: none;}
+.error-list { color: #dc3545; font-size: 0.8rem; list-style: none; margin-bottom: 1rem; text-align: center; }
+</style>
+</head>
+<body>
+<div class="blob" aria-hidden></div>
+<div class="blob" aria-hidden></div>
+
+<div class="signup-container">
+  <h2>Create Account</h2>
+
+  {% if form.errors %}
+    <ul class="error-list">
+      {% for field in form %}
+        {% for error in field.errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+      {% endfor %}
+      {% for error in form.non_field_errors %}
+        <li>{{ error }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <form method="post" action="{% url 'signup' %}">
+    {% csrf_token %}
+
+    <div class="input-group">
+      <label for="{{ form.full_name.id_for_label }}">Full Name</label>
+      {{ form.full_name }}
+    </div>
+
+    <div class="input-group">
+      <label for="{{ form.email.id_for_label }}">Email</label>
+      {{ form.email }}
+    </div>
+
+    <div class="input-group">
+      <label for="{{ form.password1.id_for_label }}">Password</label>
+      {{ form.password1 }}
+    </div>
+
+    <div class="input-group">
+      <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
+      {{ form.password2 }}
+    </div>
+
+    <button type="submit">Sign Up</button>
+  </form>
+
+  <p class="footer-text">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Collections - IndiaWrist</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="{% static 'assets/css/styles.css' %}">
+    
+    <style>
+        /* Specific tweaks for the full catalog page */
+        .catalog-page { padding-top: 6rem; }
+        .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--title-color); margin-bottom: 2rem; font-weight: 500; }
+        .page-title { text-align: center; margin-bottom: 3rem; font-size: 2rem; color: var(--title-color); }
+    </style>
+</head>
+<body>
+    <main class="main container catalog-page">
+        <a href="{% url 'index' %}" class="back-link"><i class='bx bx-arrow-back'></i> Back to Home</a>
+        
+        <h1 class="page-title">Full Collection</h1>
+
+        <div class="featured__container grid">
+            {% for product in products %}
+            <article class="featured__card">
+                <span class="featured__tag">In Stock</span>
+                
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="featured__img">
+                
+                <div class="featured__data">
+                    <h3 class="featured__title">{{ product.name }}</h3>
+                    <span class="featured__price">₹{{ product.price|floatformat:0 }}</span>
+                </div>
+
+                <button class="button featured__button" onclick="alert('Item added (Demo)')">
+                    ADD TO CART
+                </button>
+            </article>
+            {% empty %}
+            <p>No products found in the database.</p>
+            {% endfor %}
+        </div>
+    </main>
+</body>
+</html>

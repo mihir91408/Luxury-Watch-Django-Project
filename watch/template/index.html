@@ -1,0 +1,672 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="shortcut icon" href="{% static 'assets/img/favicon.png' %}" type="image/x-icon">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+
+  <link rel="stylesheet" href="{% static 'assets/css/swiper-bundle.min.css' %}">
+
+  <link rel="stylesheet" href="{% static 'assets/css/styles.css' %}">
+
+  <title>Authentic Watches — India</title>
+</head>
+<body>
+  <script>
+    const SIGNUP_URL = "{% url 'signup' %}";
+    const LOGIN_URL = "{% url 'login' %}"; 
+    const PLACE_ORDER_URL = "{% url 'place_order' %}";
+    const IS_AUTHENTICATED = {{ user.is_authenticated|yesno:"true,false" }};
+    const CSRF_TOKEN = '{{ csrf_token }}';
+  </script>
+
+  <header class="header" id="header">
+    <nav class="nav container">
+      <a href="#" class="nav__logo">
+        <i class='bx bxs-watch nav__logo-icon'></i> IndiaWrist
+      </a>
+
+      <div class="nav__menu" id="nav-menu">
+        <ul class="nav__list">
+          <li class="nav__item"><a href="#home" class="nav__link active-link">Home</a></li>
+          <li class="nav__item"><a href="#featured" class="nav__link">Featured</a></li>
+          <li class="nav__item"><a href="#products" class="nav__link">Products</a></li>
+          <li class="nav__item"><a href="#new" class="nav__link">New</a></li>
+          <li class="nav__item"><a href="#store" class="nav__link">Stores</a></li>
+        </ul>
+
+        <div class="nav__close" id="nav-close"><i class='bx bx-x'></i></div>
+      </div>
+
+      <div class="nav__btns">
+        <i class='bx bx-moon change-theme' id="theme-button" title="Toggle theme"></i>
+
+        <div class="nav__shop" id="cart-shop" title="Open cart" style="position:relative;">
+          <i class='bx bx-shopping-bag'></i>
+          <span id="cart-badge"
+                style="
+                  position:absolute;
+                  top:-6px;
+                  right:-6px;
+                  background:#e53935;
+                  color:white;
+                  border-radius:50%;
+                  padding:2px 6px;
+                  font-size:12px;
+                  display:none;
+                  line-height:1;
+                "
+                aria-hidden="true">0</span>
+        </div>
+
+        {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}" class="nav__signup-btn" style="background-color: #333;">Logout</a>
+        {% else %}
+            <a href="{% url 'signup' %}" class="nav__signup-btn">Sign Up</a>
+        {% endif %}
+
+        <div class="nav__toggle" id="nav-toggle" title="Menu">
+          <i class='bx bx-grid-alt'></i>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="cart" id="cart" aria-hidden="true">
+    <i class='bx bx-x cart__close' id="cart-close" title="Close cart"></i>
+
+    <h2 class="cart__title-center">My Cart</h2>
+
+    <div class="cart__container"></div>
+
+    <div class="cart__prices">
+      <span class="cart__prices-item" id="cart-count">0 items</span>
+      <span class="cart__prices-total" id="cart-total">₹0</span>
+    </div>
+
+    <div style="text-align:center; margin-top:8px;">
+      <button id="checkout-btn" class="button">CHECKOUT</button>
+      <button id="order-now-btn" class="button" style="margin-top:10px; background:#ff5722; color:#fff;">
+        ORDER NOW
+      </button>
+    </div>
+  </div>
+
+  <main class="main">
+    <section class="home" id="home">
+      <div class="home__container container grid">
+        <div class="home__img-bg">
+          <img src="{% static 'assets/img/home.png' %}" alt="Hero watch" class="home__img">
+        </div>
+
+        <div class="home__social">
+          <a href="https://www.facebook.com/" target="_blank" class="home__social-link">Facebook</a>
+          <a href="https://twitter.com/" target="_blank" class="home__social-link">Twitter</a>
+          <a href="https://www.instagram.com/" target="_blank" class="home__social-link">Instagram</a>
+        </div>
+
+        <div class="home__data">
+          <h1 class="home__title">NEW INDIAN <br> WATCH COLLECTIONS</h1>
+          <p class="home__description">
+            Discover authentic, expertly-crafted watches sourced and serviced in India.
+            Classic and contemporary designs for daily wear and special occasions.
+          </p>
+          <span class="home__price">₹1,245</span>
+
+          <div class="home__btns">
+            <a href="#products" class="button button--gray button--small">Discover</a>
+            <button class="button home__button add-to-cart" 
+                data-id="home1" 
+                data-name="Classic Hero" 
+                data-price="1245" 
+                data-img="{% static 'assets/img/home.png' %}">
+                ADD TO CART
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="featured section container" id="featured">
+      <h2 class="section__title">Featured</h2>
+
+      <div class="featured__container grid">
+        <article class="featured__card">
+          <span class="featured__tag">Popular</span>
+          <img src="{% static 'assets/img/featured1.png' %}" alt="Jazzmaster" class="featured__img">
+          <div class="featured__data">
+            <h3 class="featured__title">Jazzmaster</h3>
+            <span class="featured__price">₹1,05,000</span>
+          </div>
+
+          <button class="button featured__button add-to-cart"
+            data-id="featured1"
+            data-name="Jazzmaster"
+            data-price="105000"
+            data-img="{% static 'assets/img/featured1.png' %}">
+            ADD TO CART
+          </button>
+        </article>
+
+        <article class="featured__card">
+          <span class="featured__tag">Best value</span>
+          <img src="{% static 'assets/img/featured2.png' %}" alt="Ingersoll" class="featured__img">
+          <div class="featured__data">
+            <h3 class="featured__title">Ingersoll</h3>
+            <span class="featured__price">₹25,000</span>
+          </div>
+
+          <button class="button featured__button add-to-cart"
+            data-id="featured2"
+            data-name="Ingersoll"
+            data-price="25000"
+            data-img="{% static 'assets/img/featured2.png' %}">
+            ADD TO CART
+          </button>
+        </article>
+
+        <article class="featured__card">
+          <span class="featured__tag">Limited</span>
+          <img src="{% static 'assets/img/featured3.png' %}" alt="Rose gold" class="featured__img">
+          <div class="featured__data">
+            <h3 class="featured__title">Rose Gold</h3>
+            <span class="featured__price">₹89,000</span>
+          </div>
+
+          <button class="button featured__button add-to-cart"
+            data-id="featured3"
+            data-name="Rose Gold"
+            data-price="89000"
+            data-img="{% static 'assets/img/featured3.png' %}">
+            ADD TO CART
+          </button>
+        </article>
+      </div>
+    </section>
+
+    <section class="story section container">
+      <div class="story__container grid">
+        <div class="story__data">
+          <h2 class="section__title story__section-title">Our Story</h2>
+          <h1 class="story__title">Pride in Craftsmanship</h1>
+          <p class="story__description">
+            IndiaWrist combines traditional watchmaking values with modern service
+            — warranty and repairs handled locally across India.
+          </p>
+          <a href="#store" class="button button--small">Find a Store</a>
+        </div>
+
+        <div class="story__images">
+          <img src="{% static 'assets/img/story.png' %}" alt="Workshop" class="story__img">
+          <div class="story__square"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="products section container" id="products">
+      <h2 class="section__title">Products</h2>
+
+      <div class="products__container grid">
+        <article class="products__card">
+          <img src="{% static 'assets/img/product1.png' %}" alt="Spirit rose" class="products__img">
+          <h3 class="products__title">Spirit Rose</h3>
+          <span class="products__price">₹1,50,000</span>
+          <button class="products__button add-to-cart" 
+            data-id="prod1" data-name="Spirit Rose" data-price="150000" data-img="{% static 'assets/img/product1.png' %}">
+            <i class='bx bx-shopping-bag'></i>
+          </button>
+        </article>
+
+        <article class="products__card">
+          <img src="{% static 'assets/img/product2.png' %}" alt="Khaki pilot" class="products__img">
+          <h3 class="products__title">Khaki Pilot</h3>
+          <span class="products__price">₹1,35,000</span>
+          <button class="products__button add-to-cart"
+            data-id="prod2" data-name="Khaki Pilot" data-price="135000" data-img="{% static 'assets/img/product2.png' %}">
+            <i class='bx bx-shopping-bag'></i>
+          </button>
+        </article>
+
+        <article class="products__card">
+          <img src="{% static 'assets/img/product3.png' %}" alt="Jubilee black" class="products__img">
+          <h3 class="products__title">Jubilee Black</h3>
+          <span class="products__price">₹87,000</span>
+          <button class="products__button add-to-cart"
+            data-id="prod3" data-name="Jubilee Black" data-price="87000" data-img="{% static 'assets/img/product3.png' %}">
+            <i class='bx bx-shopping-bag'></i>
+          </button>
+        </article>
+
+        <article class="products__card">
+          <img src="{% static 'assets/img/product4.png' %}" alt="Fossil me3" class="products__img">
+          <h3 class="products__title">Fossil ME3</h3>
+          <span class="products__price">₹65,000</span>
+          <button class="products__button add-to-cart"
+            data-id="prod4" data-name="Fossil ME3" data-price="65000" data-img="{% static 'assets/img/product4.png' %}">
+            <i class='bx bx-shopping-bag'></i>
+          </button>
+        </article>
+
+        <article class="products__card">
+          <img src="{% static 'assets/img/product5.png' %}" alt="Duchen" class="products__img">
+          <h3 class="products__title">Duchen</h3>
+          <span class="products__price">₹95,000</span>
+          <button class="products__button add-to-cart"
+            data-id="prod5" data-name="Duchen" data-price="95000" data-img="{% static 'assets/img/product5.png' %}">
+            <i class='bx bx-shopping-bag'></i>
+          </button>
+        </article>
+      </div>
+    </section>
+
+    <section class="testimonial section container">
+      <div class="testimonial__container grid">
+        <div class="swiper testimonial-swiper">
+          <div class="swiper-wrapper">
+            <div class="testimonial__card swiper-slide">
+              <div class="testimonial__quote"><i class='bx bxs-quote-alt-left' ></i></div>
+              <p class="testimonial__description">Excellent range and local service — bought for my wedding and it's perfect.</p>
+              <h3 class="testimonial__date">Aug 12, 2023</h3>
+              <div class="testimonial__perfil">
+                <img src="{% static 'assets/img/testimonial1.jpg' %}" alt="Amit" class="testimonial__perfil-img">
+                <div class="testimonial__perfil-data">
+                  <span class="testimonial__perfil-name">Amit Sharma</span>
+                  <span class="testimonial__perfil-detail">Mumbai</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="testimonial__card swiper-slide">
+              <div class="testimonial__quote"><i class='bx bxs-quote-alt-left' ></i></div>
+              <p class="testimonial__description">Fast delivery across India and the packaging was premium.</p>
+              <h3 class="testimonial__date">Nov 03, 2023</h3>
+              <div class="testimonial__perfil">
+                <img src="{% static 'assets/img/testimonial2.jpg' %}" alt="Priya" class="testimonial__perfil-img">
+                <div class="testimonial__perfil-data">
+                  <span class="testimonial__perfil-name">Priya Mehta</span>
+                  <span class="testimonial__perfil-detail">Bengaluru</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="testimonial__card swiper-slide">
+              <div class="testimonial__quote"><i class='bx bxs-quote-alt-left' ></i></div>
+              <p class="testimonial__description">Great after-sales and local warranty service in Delhi.</p>
+              <h3 class="testimonial__date">Jan 15, 2024</h3>
+              <div class="testimonial__perfil">
+                <img src="{% static 'assets/img/testimonial3.jpg' %}" alt="Rahul" class="testimonial__perfil-img">
+                <div class="testimonial__perfil-data">
+                  <span class="testimonial__perfil-name">Rahul Verma</span>
+                  <span class="testimonial__perfil-detail">New Delhi</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="swiper-button-next"><i class='bx bx-right-arrow-alt' ></i></div>
+          <div class="swiper-button-prev"><i class='bx bx-left-arrow-alt' ></i></div>
+        </div>
+
+        <div class="testimonial__images">
+          <div class="testimonial__square"></div>
+          <img src="{% static 'assets/img/testimonial.png' %}" alt="Happy customers" class="testimonial__img">
+        </div>
+      </div>
+    </section>
+
+    <section class="new section container" id="new">
+      <h2 class="section__title">New Arrivals</h2>
+
+      <div class="new__container">
+        <div class="swiper new-swiper">
+          <div class="swiper-wrapper">
+            <article class="new__card swiper-slide">
+              <span class="new__tag">New</span>
+              <img src="{% static 'assets/img/new1.png' %}" alt="Longines rose" class="new__img">
+              <div class="new__data">
+                <h3 class="new__title">Longines Rose</h3>
+                <span class="new__price">₹98,000</span>
+              </div>
+              <button class="button new__button add-to-cart"
+                data-id="new1"
+                data-name="Longines Rose"
+                data-price="98000"
+                data-img="{% static 'assets/img/new1.png' %}">
+                ADD TO CART
+              </button>
+            </article>
+
+            <article class="new__card swiper-slide">
+              <span class="new__tag">New</span>
+              <img src="{% static 'assets/img/new2.png' %}" alt="Jazzmaster new" class="new__img">
+              <div class="new__data">
+                <h3 class="new__title">Jazzmaster (New)</h3>
+                <span class="new__price">₹1,15,000</span>
+              </div>
+              <button class="button new__button add-to-cart"
+                data-id="new2"
+                data-name="Jazzmaster (New)"
+                data-price="115000"
+                data-img="{% static 'assets/img/new2.png' %}">
+                ADD TO CART
+              </button>
+            </article>
+
+            <article class="new__card swiper-slide">
+              <span class="new__tag">New</span>
+              <img src="{% static 'assets/img/new3.png' %}" alt="Dreyfuss gold" class="new__img">
+              <div class="new__data">
+                <h3 class="new__title">Dreyfuss Gold</h3>
+                <span class="new__price">₹75,000</span>
+              </div>
+              <button class="button new__button add-to-cart"
+                data-id="new3"
+                data-name="Dreyfuss Gold"
+                data-price="75000"
+                data-img="{% static 'assets/img/new3.png' %}">
+                ADD TO CART
+              </button>
+            </article>
+
+            <article class="new__card swiper-slide">
+              <span class="new__tag">New</span>
+              <img src="{% static 'assets/img/new4.png' %}" alt="Portuguese rose" class="new__img">
+              <div class="new__data">
+                <h3 class="new__title">Portuguese Rose</h3>
+                <span class="new__price">₹1,59,000</span>
+              </div>
+              <button class="button new__button add-to-cart"
+                data-id="new4"
+                data-name="Portuguese Rose"
+                data-price="159000"
+                data-img="{% static 'assets/img/new4.png' %}">
+                ADD TO CART
+              </button>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="newsletter section container">
+      <div class="newsletter__bg grid">
+        <div>
+          <h2 class="newsletter__title">Subscribe to Our Newsletter</h2>
+          <p class="newsletter__description">Get the latest collections, exclusive offers and local service updates across India.</p>
+        </div>
+
+        <form method="post" action="#" class="newsletter__subscribe">
+          {% csrf_token %}
+          <input type="email" name="email" placeholder="Enter your email" class="newsletter__input" required>
+          <button class="button">SUBSCRIBE</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="store" class="section container">
+      <h2 class="section__title">Our Stores</h2>
+      <div class="featured__container grid">
+        <article class="featured__card">
+          <h3 class="featured__title">Mumbai - Bandra</h3>
+          <p class="featured__price">Shop 12, Bandra Promenade, Mumbai, Maharashtra</p>
+          <p class="featured__description">Mon–Sat: 10:00am–10:30pm</p>
+        </article>
+        <article class="featured__card">
+          <h3 class="featured__title">Delhi - Connaught Place</h3>
+          <p class="featured__price">Ground Floor, CP Market, New Delhi, Delhi</p>
+          <p class="featured__description">Mon–Sat: 10:00am–10:30pm</p>
+        </article>
+        <article class="featured__card">
+          <h3 class="featured__title">Bengaluru - Indiranagar</h3>
+          <p class="featured__price">Shop 4, 2nd Main, Indiranagar, Bengaluru, Karnataka</p>
+          <p class="featured__description">Mon–Sat: 10:00am–10:30pm</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer section">
+    <div class="footer__container container grid">
+      <div class="footer__content">
+        <h3 class="footer__title">Contact</h3>
+        <ul class="footer__list">
+          <li>IndiaWrist Pvt Ltd</li>
+          <li>123, MG Road, Bengaluru, Karnataka 560001</li>
+          <li>+91 98765 43210</li>
+        </ul>
+      </div>
+
+      <div class="footer__content">
+        <h3 class="footer__title">Support</h3>
+        <ul class="footer__links">
+          <li><a href="#" class="footer__link">Customer Support</a></li>
+          <li><a href="#" class="footer__link">Warranty & Service</a></li>
+          <li><a href="#" class="footer__link">Shipping Policy</a></li>
+          <li><a href="#" class="footer__link">Returns</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__content">
+        <h3 class="footer__title">Products</h3>
+        <ul class="footer__links">
+          <li class="nav__item"><a href="#home" class="nav__link active-link">Home</a></li>
+          <li class="nav__item"><a href="#featured" class="nav__link">Featured</a></li>
+          <li class="nav__item"><a href="#products" class="nav__link">Products</a></li>
+          <li class="nav__item"><a href="#new" class="nav__link">New</a></li>
+          <li class="nav__item"><a href="#store" class="nav__link">Stores</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__content">
+        <h3 class="footer__title">Social</h3>
+        <ul class="footer__social">
+          <a href="https://www.facebook.com/" target="_blank" class="footer__social-link"><i class='bx bxl-facebook'></i></a>
+          <a href="https://twitter.com/" target="_blank" class="footer__social-link"><i class='bx bxl-twitter' ></i></a>
+          <a href="https://www.instagram.com/" target="_blank" class="footer__social-link"><i class='bx bxl-instagram' ></i></a>
+        </ul>
+      </div>
+    </div>
+
+    <span class="footer__copy">&#169; IndiaWrist. All rights reserved</span>
+  </footer>
+
+  <a href="#" class="scrollup" id="scroll-up"><i class='bx bx-up-arrow-alt scrollup__icon' ></i></a>
+
+  <script src="{% static 'assets/js/swiper-bundle.min.js' %}"></script>
+
+  <script src="{% static 'assets/js/main.js' %}"></script>
+
+  <script>
+    (function(){
+      const STORAGE_KEY = 'watch_cart_inr_v1';
+      
+      const $ = (s, r=document) => r.querySelector(s);
+      const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+      const formatPrice = p => Number(p).toLocaleString('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+
+      const cartEl = $('#cart');
+      const cartClose = $('#cart-close');
+      const cartShop = $('#cart-shop');
+      const cartContainer = document.querySelector('.cart__container');
+      const cartCountEl = document.getElementById('cart-count');
+      const cartTotalEl = document.getElementById('cart-total');
+      const checkoutBtn = document.getElementById('checkout-btn');
+      const cartBadge = document.getElementById('cart-badge');
+      const orderNowBtn = document.getElementById('order-now-btn');
+
+      function loadCart(){ try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e){ return {}; } }
+      function saveCart(c){ localStorage.setItem(STORAGE_KEY, JSON.stringify(c)); }
+
+      function addToCart(item){
+        const cart = loadCart();
+        if(cart[item.id]) cart[item.id].qty += 1;
+        else cart[item.id] = {...item, qty:1};
+        saveCart(cart);
+        renderCart();
+      }
+
+      function removeItem(id){
+        const cart = loadCart();
+        delete cart[id];
+        saveCart(cart);
+        renderCart();
+      }
+
+      function changeQty(id, delta){
+        const cart = loadCart();
+        if(!cart[id]) return;
+        cart[id].qty = Math.max(1, cart[id].qty + delta);
+        saveCart(cart);
+        renderCart();
+      }
+
+      function cartSummary(cart){
+        const items = Object.values(cart);
+        const totalCount = items.reduce((s,i)=>s + i.qty, 0);
+        const totalPrice = items.reduce((s,i)=>s + (i.qty * Number(i.price)), 0);
+        return { totalCount, totalPrice, items };
+      }
+
+      function renderCart(){
+        const cart = loadCart();
+        const summary = cartSummary(cart);
+
+        if(cartCountEl) cartCountEl.textContent = `${summary.totalCount} item${summary.totalCount !== 1 ? 's':''}`;
+        if(cartTotalEl) cartTotalEl.textContent = formatPrice(summary.totalPrice);
+
+        if (cartBadge) {
+          if (summary.totalCount > 0) {
+            cartBadge.style.display = "inline-block";
+            cartBadge.textContent = summary.totalCount;
+          } else {
+            cartBadge.style.display = "none";
+          }
+        }
+
+        if(!cartContainer) return;
+        cartContainer.innerHTML = '';
+
+        if(summary.items.length === 0){
+          cartContainer.innerHTML = '<p style="padding:16px">Your cart is empty.</p>';
+          return;
+        }
+
+        summary.items.forEach(i => {
+          const art = document.createElement('article');
+          art.className = 'cart__card';
+          art.innerHTML = `
+            <div class="cart__box">
+              <img src="${i.img}" alt="${i.name}" class="cart__img">
+            </div>
+            <div class="cart__details">
+              <h3 class="cart__title">${i.name}</h3>
+              <span class="cart__price">${formatPrice(i.price)}</span>
+              <div class="cart__amount">
+                <div class="cart__amount-content">
+                  <button class="cart__amount-box cart-decrease" data-id="${i.id}">-</button>
+                  <span class="cart__amount-number">${i.qty}</span>
+                  <button class="cart__amount-box cart-increase" data-id="${i.id}">+</button>
+                </div>
+                <button class="cart__amount-trash cart-remove" data-id="${i.id}">Remove</button>
+              </div>
+            </div>
+          `;
+          cartContainer.appendChild(art);
+        });
+
+        $$('.cart-decrease', cartContainer).forEach(b => b.addEventListener('click', e => changeQty(e.currentTarget.dataset.id, -1)));
+        $$('.cart-increase', cartContainer).forEach(b => b.addEventListener('click', e => changeQty(e.currentTarget.dataset.id, +1)));
+        $$('.cart-remove', cartContainer).forEach(b => b.addEventListener('click', e => removeItem(e.currentTarget.dataset.id)));
+      }
+
+      // --- MAIN CHECKOUT LOGIC ---
+      async function handleCheckout() {
+        const cart = loadCart();
+        const summary = cartSummary(cart);
+        
+        if(summary.totalCount === 0){ alert('Your cart is empty.'); return; }
+
+        // 1. Check Authentication
+        if(!IS_AUTHENTICATED){
+          const ok = confirm('You must log in to place an order. Proceed to login?');
+          if(ok) {
+              // Redirect to Login page (and come back to home after)
+              window.location.href = LOGIN_URL + "?next=" + window.location.pathname;
+          }
+          return;
+        }
+
+        // 2. Confirm Order
+        const final = confirm(`Confirm purchase of ${summary.totalCount} item(s) for ${formatPrice(summary.totalPrice)}?`);
+        
+        if(final){
+          // 3. Send Data to Django Backend
+          try {
+              const response = await fetch(PLACE_ORDER_URL, {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'X-CSRFToken': CSRF_TOKEN
+                  },
+                  body: JSON.stringify({
+                      items: summary.items,
+                      total_price: summary.totalPrice
+                  })
+              });
+
+              const data = await response.json();
+
+              if(data.status === 'success') {
+                  alert('Order Successfully Placed! Order ID: ' + data.order_id);
+                  localStorage.removeItem(STORAGE_KEY); // Clear Cart
+                  renderCart();
+                  closeCart();
+              } else {
+                  alert('Error placing order: ' + data.message);
+              }
+
+          } catch (error) {
+              console.error('Error:', error);
+              alert('Something went wrong. Please try again.');
+          }
+        }
+      }
+
+      function wireAddButtons(){
+        $$('.add-to-cart').forEach(btn => {
+          btn.addEventListener('click', e => {
+            const el = e.currentTarget;
+            const item = {
+              id: el.dataset.id,
+              name: el.dataset.name,
+              price: Number(el.dataset.price),
+              img: el.dataset.img
+            };
+            addToCart(item);
+            const prev = el.innerHTML;
+            el.innerHTML = 'ADDED ✓';
+            setTimeout(()=> el.innerHTML = prev, 900);
+          });
+        });
+      }
+
+      function openCart(){ if(cartEl) cartEl.classList.add('show-cart'); }
+      function closeCart(){ if(cartEl) cartEl.classList.remove('show-cart'); }
+
+      if(cartShop) cartShop.addEventListener('click', openCart);
+      if(cartClose) cartClose.addEventListener('click', closeCart);
+      
+      // Attach checkout logic to both buttons
+      if(checkoutBtn) checkoutBtn.addEventListener('click', handleCheckout);
+      if(orderNowBtn) orderNowBtn.addEventListener('click', handleCheckout);
+
+      // Init
+      wireAddButtons();
+      renderCart();
+    })();
+  </script>
+</body>
+</html>
